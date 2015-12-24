@@ -5,6 +5,7 @@ This project is a simple example of using Go build linker flags to set package v
 ```
 cd cmd/
 go build -ldflags "-X main.MainVar=hihi"
+./cmd
 
 Output:
 
@@ -12,10 +13,12 @@ MainVar: hihi
 Version: 
 ```
 
-## Setting nested package variabls with linker flags
+## Setting pathed package variables with linker flags
+The `github.com/ropes/go-linker-vars-example/src/version` can then be imported into any Go package to access its exported variables.
 ```
 cd cmd/
 go build -ldflags "-X github.com/ropes/go-linker-vars-example/src/version.Version=hihi"
+./cmd
 
 Output:
 
