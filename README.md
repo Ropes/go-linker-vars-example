@@ -1,5 +1,5 @@
 # go-linker-vars-example
-This project is a simple example of using Go build linker flags to set package variables deeper than just main. I created this repo because I didn't find a good example on the topic of deeper variables which could be imported into multiple main packages. Full documentation for the [go command](https://golang.org/cmd/go/).
+This project is a simple example of using `go build` linker flags to set package variables deeper than just main which is well covered. I created this repo because I didn't find a good example on the topic of deeper variables which could be imported into multiple main packages. Full documentation for the [go command](https://golang.org/cmd/go/).
 
 **NOTE: This repo example repo is built using Go 1.5.2, I know for a fact the flags changed since 1.4.x. However the same concepts should are available just check the documentation**
 
@@ -28,8 +28,8 @@ MainVar:
 Version: hihi
 ```
 
-# More useful example
-Inject VCS and build information into the binary. 
+# Getting fancy with it!
+Inject VCS and build information into the an importable package which can be referenced by multiple binaries. 
 ```
 cd cmd/complex
 gittag=$(git describe --tags)
@@ -41,7 +41,21 @@ go build -ldflags "-X github.com/ropes/go-linker-vars-example/src/version.GitTag
 Output:
 $./complex 
 Git Tag:   v0.0.1-1-gd75e8db
-Buid User: josh
+Build User: josh
 Version:   v0.0.1
+```
+Import the `version` package to access the exported variables set by the linker flags!
+
+```go
+package main
+
+import "fmt"
+import "github.com/ropes/go-linker-vars-example/src/version"
+
+func main() {
+	fmt.Printf("Git Tag:   %s\n", version.GitTag)
+	fmt.Printf("Build User: %s\n", version.BuildUser)
+	fmt.Printf("Version:   %s\n", version.Version)
+}
 ```
 
