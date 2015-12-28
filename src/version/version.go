@@ -1,5 +1,5 @@
 package version
 
 var (
-	Version, Date, BuildUser, GitHash string
+	Version, Date, BuildUser, GitTag string
 )
