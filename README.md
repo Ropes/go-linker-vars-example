@@ -7,10 +7,8 @@ This project is a simple example of using `go build` linker flags to set package
 ```
 cd cmd/
 go build -ldflags "-X main.MainVar=hihi"
-./cmd
 
-Output:
-
+$ ./cmd
 MainVar: hihi
 Version: 
 ```
@@ -29,23 +27,7 @@ Version: hihi
 ```
 
 # Getting fancy with it!
-Inject VCS and build information into the an importable package which can be referenced by multiple binaries. 
-```
-cd cmd/complex
-gittag=$(git describe --tags)
-
-go build -ldflags "-X github.com/ropes/go-linker-vars-example/src/version.GitTag=${gittag} 
--X github.com/ropes/go-linker-vars-example/src/version.BuildUser=${USER} 
--X github.com/ropes/go-linker-vars-example/src/version.Version=v0.0.1"
-
-Output:
-$./complex 
-Git Tag:   v0.0.1-1-gd75e8db
-Build User: josh
-Version:   v0.0.1
-```
-Import the `version` package to access the exported variables set by the linker flags!
-
+Import the `version` package to where it will be exposed or logged:
 ```go
 package main
 
@@ -57,5 +39,21 @@ func main() {
 	fmt.Printf("Build User: %s\n", version.BuildUser)
 	fmt.Printf("Version:   %s\n", version.Version)
 }
+```
+
+Inject VCS and build information into the an importable package which can be referenced by multiple binaries via the `go ``build` or `install` commands. 
+```
+cd cmd/complex
+gittag=$(git describe --tags)
+
+go build -ldflags "-X github.com/ropes/go-linker-vars-example/src/version.GitTag=${gittag} 
+-X github.com/ropes/go-linker-vars-example/src/version.BuildUser=${USER} 
+-X github.com/ropes/go-linker-vars-example/src/version.Version=v0.0.1"
+
+Output:
+$./complex 
+Git Tag:    v0.0.1-1-gd75e8db
+Build User: josh
+Version:    v0.0.1
 ```
 
